@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ item.title }}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .article-container {
+            max-width: 1140px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .breadcrumb {
+            background-color: #f1f1f1;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .breadcrumb a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        .article-title {
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .article-date {
+            color: #6c757d;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        .article-content {
+            margin-bottom: 30px;
+        }
+        .clearfix {
+            clear: both;
+        }
+        .fotorama {
+            margin: 20px 0;
+        }
+    </style>
+    {% load static %}
+</head>
+
+<body>
+    <div class="article-container">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Головна</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'articles-list' %}">Публікації</a></li>
+            <li class="breadcrumb-item"><a href="{{ item.category.get_absolute_url }}">{{ item.category|upper }}</a></li>
+            <li class="breadcrumb-item active">{{ item.title|upper }}</li>
+        </ol>
+        
+        <div class="article-header">
+            <h3 class="article-title">
+                {{ item.title }}
+            </h3>
+            <h5 class="article-date">
+                {{ item.pub_date|date:"d E Y"|safe|linebreaks }}
+            </h5>
+        </div>
+        
+        <div class="article-content">
+            {{ item.description|escape|safe }}
+            
+            {% if item.images.all %}
+                {% include 'fotorama.html' with images=images %}
+            {% endif %}
+        </div>
+        
+        <div class='clearfix'></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

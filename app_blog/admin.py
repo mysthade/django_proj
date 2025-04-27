@@ -1,41 +1,25 @@
 from django.contrib import admin
-from .models import Article, ArticleImage, Category
-from .forms import ArticleImageForm
+from .models import Article, Category, ArticleImage
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('category', 'slug')
     prepopulated_fields = {'slug': ('category',)}
-    fieldsets = (
-        ('', {
-            'fields': ('category', 'slug'),
-        }),
-    )
-
-admin.site.register(Category, CategoryAdmin)
 
 class ArticleImageInline(admin.TabularInline):
     model = ArticleImage
-    form = ArticleImageForm
-    extra = 1  # Додаємо 1 додатковий рядок
-    fieldsets = (
-        ('', {
-            'fields': ('title', 'image',),
-        }),
-    )
+    extra = 0
 
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('title', 'pub_date', 'slug', 'main_page')
+    list_display = ('title', 'pub_date', 'slug', 'main_page', 'category')
     inlines = [ArticleImageInline]
+    multiupload_form = True
+    multiupload_list = False
     prepopulated_fields = {'slug': ('title',)}
     raw_id_fields = ('category',)
-    fieldsets = (
-        ('', {
-            'fields': ('pub_date', 'title', 'description', 'main_page'),
-        }),
-        ((u'Додатково'), {
-            'classes': ('grp-collapse grp-closed',),
-            'fields': ('slug',),
-        }),
-    )
+    search_fields = ['title', 'description', 'slug']
+    ordering = ['-pub_date']
+    save_on_top = True
+    list_filter = ('pub_date', 'category')
 
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Article, ArticleAdmin)

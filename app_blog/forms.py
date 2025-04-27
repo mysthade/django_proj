@@ -8,5 +8,4 @@ class ArticleImageForm(forms.ModelForm):
         model = ArticleImage
         fields = '__all__'
     
-    # В цьому випадку ми не будемо використовувати multiple в віджетах
     image = forms.FileField()

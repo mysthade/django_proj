@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Публікації</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1140px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .page-title {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2.2rem;
+        }
+        .category-title {
+            color: #007bff;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .articles-row {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .articles-row:last-child {
+            border-bottom: none;
+        }
+        .articles-row a {
+            color: #333;
+            text-decoration: none;
+        }
+        .articles-row a:hover h4 {
+            color: #007bff;
+        }
+        .articles-row h4 {
+            margin-bottom: 5px;
+            transition: color 0.3s;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        .articles-row h5 {
+            color: #6c757d;
+            font-style: italic;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        .articles-row p {
+            margin-bottom: 15px;
+            /* Removing truncation styling */
+            display: block;
+            width: 100%;
+            overflow: visible;
+            text-overflow: clip;
+            white-space: normal;
+        }
+        .container-image {
+            margin: 15px 0;
+            text-align: center;
+        }
+        .container-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 16px;
+            color: #007bff;
+            text-decoration: none;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        .back-link:hover {
+            background-color: #007bff;
+            color: white;
+        }
+        .clearfix {
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="page-title">Публікації</h2>
+        
+        {% if category %}
+            <h3 class="category-title">{{ category }}</h3>
+        {% endif %}
+        
+        {% for item in items %}
+            <div class="articles-row">
+                <a href="{{ item.get_absolute_url }}">
+                    <h4>{{ item.title }}</h4>
+                </a>
+                <h5>
+                    {{ item.pub_date|date:"j E Y"|safe|linebreaks }}
+                </h5>
+                <!-- Removed truncatewords_html filter to show full text -->
+                <p>
+                    {{ item.description|safe|escape|striptags }}
+                </p>
+                {% if item.images.all.0.image.url %}
+                <div class="container-image">
+                    <img class="img" src="{{ item.images.all.0.image.url }}" alt="" />
+                </div>
+                {% endif %}
+                <div class='clearfix'></div>
+            </div>
+        {% endfor %}
+        
+        <a href="/" class="back-link">Повернутися на головну</a>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
